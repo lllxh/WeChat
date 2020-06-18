@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 
 public class ClientUi extends JFrame implements ActionListener {
-    JFrame jFrame=new JFrame("WeChat");
+    JFrame jFrame=new JFrame();
     public Client client;
     public PrintWriter printWriter;
     public JPanel jPanel1=new JPanel();
@@ -24,7 +24,6 @@ public class ClientUi extends JFrame implements ActionListener {
     public static JTextArea jTextArea2 = new JTextArea(12,42);
     public JLabel jLabel=new JLabel("dei");
     public static JComboBox jComboBox=new JComboBox();
-    public JCheckBox jCheckBox=new JCheckBox("私聊");
     public JTextField jTextField=new JTextField(36);
     public JButton jButton1=new JButton("发送");
     public JButton jButton2=new JButton("刷新");
@@ -35,6 +34,7 @@ public class ClientUi extends JFrame implements ActionListener {
     public String message;
 
     public void getmenu(String name){
+        jFrame.setTitle("WeChat-"+name);
         jComboBox.addItem("所有人");
         this.name=name;
         jTextArea1.setEditable(false);
@@ -44,7 +44,7 @@ public class ClientUi extends JFrame implements ActionListener {
         jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jList1.setVisibleRowCount(18);
         jList1.setFixedCellHeight(28);
-        jList1.setFixedCellWidth(100);
+        jList1.setFixedCellWidth(185);
         JScrollPane jScrollPane1=new JScrollPane(jTextArea1);
         JScrollPane jScrollPane2=new JScrollPane(jTextArea2);
         JScrollPane jScrollPane3=new JScrollPane(jList1);
@@ -57,10 +57,10 @@ public class ClientUi extends JFrame implements ActionListener {
         jPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
         jPanel2.add(jLabel);
         jPanel2.add(jComboBox);
-        jPanel2.add(jCheckBox);
-        jPanel3.setLayout(new FlowLayout(FlowLayout.LEFT));
-        jPanel3.add(jTextField);
-        jPanel3.add(jButton1);
+        //jPanel2.add(jCheckBox);
+        jPanel3.setLayout(new BorderLayout());
+        jPanel3.add(jTextField,BorderLayout.CENTER);
+        jPanel3.add(jButton1,BorderLayout.EAST);
         jPanel4.setLayout(new GridLayout(2,1));
         jPanel4.add(jPanel2);
         jPanel4.add(jPanel3);
@@ -75,11 +75,12 @@ public class ClientUi extends JFrame implements ActionListener {
         jPanel7.add(jPanel5);
         jFrame.add(jPanel7);
         jFrame.setLocation(200,200);//初始在我电脑上的位置坐标
-        jFrame.setSize(700,650);//聊天框大小
+        jFrame.setSize(750,650);//聊天框大小
         jFrame.setResizable(false);//用户是否可以调整大小
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jButton1.addActionListener(this);//监听点击图标动作
         jButton2.addActionListener(this);//监听点击图标动作
+        jTextField.setSize(400,200);
         jTextArea1.setLineWrap(true);//自动换行
         jTextArea2.setLineWrap(true);//自动换行
         jScrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);//垂直滚动条
@@ -115,6 +116,10 @@ public class ClientUi extends JFrame implements ActionListener {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        new ClientUi().getmenu("aa");
+    }
     public ClientUi(){
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -141,17 +146,17 @@ public class ClientUi extends JFrame implements ActionListener {
             printWriter=new PrintWriter(Client.socket.getOutputStream());
             if ("发送".equals(event.getActionCommand())){
                 if (!"".equals(jTextField.getText())){
-                    if (jCheckBox.isSelected()){
-                        String name1=(String) jComboBox.getSelectedItem();
-                        message="【私聊消息】 "+name+"对"+name1+"说："+jTextField.getText();
-                        printWriter.println("300");//发送私聊标识
-                        printWriter.println(name+":"+name1+"911"+message);
+                    if (jComboBox.getSelectedItem().equals("所有人")){
+                        printWriter.println("200");//发送群聊标识
+                        printWriter.println("【群发消息】"+name+"说："+jTextField.getText());
                         printWriter.flush();
 
                     }
                     else {
-                        printWriter.println("200");//发送群聊标识
-                        printWriter.println("【群发消息】"+name+"说："+jTextField.getText());
+                        String name1=(String) jComboBox.getSelectedItem();
+                        message="【私聊消息】 "+name+"对"+name1+"说："+jTextField.getText();
+                        printWriter.println("300");//发送私聊标识
+                        printWriter.println(name+":"+name1+"911"+message);
                         printWriter.flush();
                     }
                 }
