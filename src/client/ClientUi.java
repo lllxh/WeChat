@@ -173,6 +173,22 @@ public class ClientUi extends JFrame implements ActionListener {
             }
         }
         );
+        frame2.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try{
+                    printWriter=new PrintWriter(Client.socket.getOutputStream());
+                    printWriter.println("500");//发送下线标识
+                    printWriter.println(name+":下线了");
+                    printWriter.flush();
+                    frame1.dispose();//软件关闭窗口
+                    frame2.dispose();
+                }catch (Exception e1){
+                    e1.printStackTrace();
+                }
+            }
+        }
+        );
     }
 
     @Override
