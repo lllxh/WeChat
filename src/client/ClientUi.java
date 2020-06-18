@@ -1,6 +1,9 @@
 package client;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +13,8 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 
 public class ClientUi extends JFrame implements ActionListener {
-    JFrame jFrame=new JFrame();
+    JFrame frame1=new JFrame();
+    JFrame frame2=new JFrame();
     public Client client;
     public PrintWriter printWriter;
     public JPanel jPanel1=new JPanel();
@@ -34,7 +38,16 @@ public class ClientUi extends JFrame implements ActionListener {
     public String message;
 
     public void getmenu(String name){
-        jFrame.setTitle("WeChat-"+name);
+        frame1.setTitle("WeChat-"+name);
+        frame1.setSize(700,550);
+        frame1.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame1.setLocationRelativeTo(null);
+        frame1.setResizable(false);
+        frame2.setTitle("好友列表");
+        frame2.setSize(190,30);
+        frame2.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame2.setLocation(200,200);
+        frame2.setResizable(false);
         jComboBox.addItem("所有人");
         this.name=name;
         jTextArea1.setEditable(false);
@@ -57,7 +70,9 @@ public class ClientUi extends JFrame implements ActionListener {
         jPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
         jPanel2.add(jLabel);
         jPanel2.add(jComboBox);
-        //jPanel2.add(jCheckBox);
+        //Border border1 = jPanel2.getBorder();
+        //Border margin1 = new EmptyBorder(10,10,10,10);
+        //jPanel2.setBorder(new CompoundBorder(border1,margin1));
         jPanel3.setLayout(new BorderLayout());
         jPanel3.add(jTextField,BorderLayout.CENTER);
         jPanel3.add(jButton1,BorderLayout.EAST);
@@ -70,17 +85,17 @@ public class ClientUi extends JFrame implements ActionListener {
         jPanel6.setLayout(new BorderLayout());
         jPanel6.add(jScrollPane3,BorderLayout.NORTH);
         jPanel6.add(jButton2,BorderLayout.SOUTH);
-        jPanel7.setLayout(new FlowLayout(FlowLayout.LEFT));
-        jPanel7.add(jPanel6);
-        jPanel7.add(jPanel5);
-        jFrame.add(jPanel7);
-        jFrame.setLocation(200,200);//初始在我电脑上的位置坐标
-        jFrame.setSize(750,650);//聊天框大小
-        jFrame.setResizable(false);//用户是否可以调整大小
-        jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        Border border = jPanel5.getBorder();
+        Border margin = new EmptyBorder(10,10,10,10);
+        jPanel5.setBorder(new CompoundBorder(border,margin));
+        frame1.add(jPanel5);
+        Border border1 = jPanel6.getBorder();
+        Border margin1 = new EmptyBorder(10,10,10,10);
+        jPanel6.setBorder(new CompoundBorder(border1,margin1));
+        frame2.add(jPanel6);
         jButton1.addActionListener(this);//监听点击图标动作
         jButton2.addActionListener(this);//监听点击图标动作
-        jTextField.setSize(400,200);
+        jTextField.setSize(400,150);
         jTextArea1.setLineWrap(true);//自动换行
         jTextArea2.setLineWrap(true);//自动换行
         jScrollPane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);//垂直滚动条
@@ -89,9 +104,32 @@ public class ClientUi extends JFrame implements ActionListener {
         jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jFrame.setVisible(true);//是否可见
-        jFrame.pack();//自动适应窗口大小
+        frame1.setVisible(true);//是否可见
+        frame2.setVisible(true);
+        //自动适应窗口大小
+        //frame1.pack();
+        frame2.pack();
 
+
+
+        /*
+
+
+
+
+
+
+
+        jPanel7.setLayout(new FlowLayout(FlowLayout.LEFT));
+        jPanel7.add(jPanel6);
+        jPanel7.add(jPanel5);
+        jFrame.add(jPanel7);
+        jFrame.setLocation(200,200);//初始在我电脑上的位置坐标
+        jFrame.setSize(750,650);//聊天框大小
+        jFrame.setResizable(false);//用户是否可以调整大小
+        jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        */
 
     }
 
@@ -121,7 +159,7 @@ public class ClientUi extends JFrame implements ActionListener {
         new ClientUi().getmenu("aa");
     }
     public ClientUi(){
-        jFrame.addWindowListener(new WindowAdapter() {
+        frame1.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 try{
@@ -129,7 +167,7 @@ public class ClientUi extends JFrame implements ActionListener {
                     printWriter.println("500");//发送下线标识
                     printWriter.println(name+":下线了");
                     printWriter.flush();
-                    jFrame.dispose();//软件关闭窗口
+                    frame1.dispose();//软件关闭窗口
                 }catch (Exception e1){
                     e1.printStackTrace();
                 }
