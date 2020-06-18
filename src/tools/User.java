@@ -4,6 +4,7 @@ import java.net.Socket;
 
 /**
  * @author 15068
+ * @author cy
  */
 public class User {
     private String name;

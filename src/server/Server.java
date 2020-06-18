@@ -76,8 +76,6 @@ public class Server {
                     //显示好友列表
                     if(msg.equals("100")) {
                         msg= bufferedReader.readLine();
-                        //将用户信息跟信息分隔开
-                        //String[] st=msg.split(":");
                         //将用户信息添加到User对象中
                         uu=new User(msg,socket);
                         //将对象添加到用户集合

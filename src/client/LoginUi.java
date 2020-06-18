@@ -1,15 +1,14 @@
 package client;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Flow;
 
 /**
  * 登录UI
  * @author lllxh
+ * @author cy
  */
 public class LoginUi extends Frame implements ActionListener {
     JFrame frame = new JFrame();
@@ -75,10 +74,11 @@ public class LoginUi extends Frame implements ActionListener {
 
     }
 
-    @Override
     /**
      * 按钮事件触发
+     * @param event
      */
+    @Override
     public void actionPerformed(ActionEvent event){
         button2.setText("登录");
         button2.setText("取消");
@@ -93,7 +93,7 @@ public class LoginUi extends Frame implements ActionListener {
             else {
                 frame.setVisible(false);
                 ClientUi clientUi=new ClientUi();
-                clientUi.getmenu(textField.getText());
+                clientUi.getUi(textField.getText());
                 clientUi.socket();
             }
         }

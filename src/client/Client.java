@@ -4,21 +4,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.management.BufferPoolMXBean;
 import java.net.Socket;
-import java.security.Principal;
-import java.security.PublicKey;
 
+
+/**
+ * @author lllxh
+ * @author cy
+ */
 public class Client {
-    private static final int PORT = 15555;//定义端口数值
+    private static final int PORT = 12000;//定义端口数值
     public static String user;
     public static Socket socket;
 
     public Client(String user){
         this.user=user;
         try{
-            socket=new Socket("localhost",PORT);//建立Socket连接
-            System.out.println("欢迎【"+user+"】来到聊天室≥Ö‿Ö≤");//
+            //建立Socket连接
+            socket=new Socket("localhost",PORT);
+            System.out.println("欢迎【"+user+"】来到聊天室≥Ö‿Ö≤");
             Thread thread=new CreatThread(socket,user);
             thread.start();
 
@@ -60,13 +63,16 @@ class CreatThread extends Thread {
                 // 创建好友列表
                 if (msg.equals("100")){
                     clientUi.defaultListModel1.clear();
-                    clientUi.jComboBox.removeAllItems();//清空复选框
+                    //清空复选框
+                    clientUi.jComboBox.removeAllItems();
                     clientUi.jComboBox.addItem("所有人");
                     msg=bufferedReader2.readLine();
                     String[] str = msg.split(":");
                     for (String ss:str){
-                        clientUi.defaultListModel1.addElement(ss);//讲所有用户添加到好友列表
-                        clientUi.jComboBox.addItem(ss);//将所有用户信息添加到复选框
+                        //将所有用户添加到好友列表
+                        clientUi.defaultListModel1.addElement(ss);
+                        //将所有用户信息添加到复选框
+                        clientUi.jComboBox.addItem(ss);
                     }
                 }
                 // 显示群聊消息
@@ -103,8 +109,10 @@ class CreatThread extends Thread {
                     msg=bufferedReader2.readLine();
                     String[] str = msg.split(":");
                     for (String ssr:str){
-                        clientUi.defaultListModel1.addElement(ssr);//讲所有用户添加到好友列表
-                        clientUi.jComboBox.addItem(ssr);//将所有用户信息添加到复选框
+                        //将所有用户添加到好友列表
+                        clientUi.defaultListModel1.addElement(ssr);
+                        //将所有用户信息添加到复选框
+                        clientUi.jComboBox.addItem(ssr);
                     }
                 }
             }
