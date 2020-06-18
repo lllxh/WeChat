@@ -13,8 +13,8 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 
 public class ClientUi extends JFrame implements ActionListener {
-    JFrame frame1=new JFrame();
-    JFrame frame2=new JFrame();
+    JFrame frame1=new JFrame();//聊天室窗口
+    JFrame frame2=new JFrame();//好友列表窗口
     public Client client;
     public PrintWriter printWriter;
     public JPanel jPanel1=new JPanel();
@@ -26,7 +26,7 @@ public class ClientUi extends JFrame implements ActionListener {
     public JPanel jPanel7=new JPanel();
     public static JTextArea jTextArea1=new JTextArea(12,42);
     public static JTextArea jTextArea2 = new JTextArea(12,42);
-    public JLabel jLabel=new JLabel("dei");
+    public JLabel jLabel=new JLabel("对");
     public static JComboBox jComboBox=new JComboBox();
     public JTextField jTextField=new JTextField(36);
     public JButton jButton1=new JButton("发送");
@@ -46,7 +46,7 @@ public class ClientUi extends JFrame implements ActionListener {
         frame2.setTitle("好友列表");
         frame2.setSize(190,30);
         frame2.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame2.setLocation(200,200);
+        frame2.setLocation(1250,20);
         frame2.setResizable(false);
         jComboBox.addItem("所有人");
         this.name=name;
@@ -155,9 +155,7 @@ public class ClientUi extends JFrame implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        new ClientUi().getmenu("aa");
-    }
+
     public ClientUi(){
         frame1.addWindowListener(new WindowAdapter() {
             @Override
@@ -168,6 +166,7 @@ public class ClientUi extends JFrame implements ActionListener {
                     printWriter.println(name+":下线了");
                     printWriter.flush();
                     frame1.dispose();//软件关闭窗口
+                    frame2.dispose();
                 }catch (Exception e1){
                     e1.printStackTrace();
                 }

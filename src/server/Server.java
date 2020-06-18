@@ -22,7 +22,7 @@ public class Server {
      */
     public static ArrayList<User> list1= new ArrayList<>();
     public User uu;
-    private static final int PORT=15555;
+    private static final int PORT=12000;
     private ServerSocket server;
     public ArrayList<PrintWriter> list;
     public static String user;
