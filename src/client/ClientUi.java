@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 
 public class ClientUi extends JFrame implements ActionListener {
-    JFrame jFrame=new JFrame();
+    JFrame jFrame=new JFrame("WeChat");
     public Client client;
     public PrintWriter printWriter;
     public JPanel jPanel1=new JPanel();
@@ -31,17 +31,18 @@ public class ClientUi extends JFrame implements ActionListener {
     public static DefaultListModel defaultListModel1; //列表格式
     public static JList jList1;//列表
 
-    public String name,message;
+    public String name;
+    public String message;
+
     public void getmenu(String name){
-        jFrame = new JFrame("【"+name+"】的客户端");
-        this.name=name;
         jComboBox.addItem("所有人");
+        this.name=name;
         jTextArea1.setEditable(false);
         jTextArea2.setEditable(false);
         defaultListModel1=new DefaultListModel();
         jList1=new JList(defaultListModel1);
         jList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        jList1.setVisibleRowCount(10);
+        jList1.setVisibleRowCount(18);
         jList1.setFixedCellHeight(28);
         jList1.setFixedCellWidth(100);
         JScrollPane jScrollPane1=new JScrollPane(jTextArea1);
@@ -74,9 +75,9 @@ public class ClientUi extends JFrame implements ActionListener {
         jPanel7.add(jPanel5);
         jFrame.add(jPanel7);
         jFrame.setLocation(200,200);//初始在我电脑上的位置坐标
-        jFrame.setSize(650,600);//聊天框大小
-        jFrame.setResizable(true);//用户是否可以调整大小
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setSize(700,650);//聊天框大小
+        jFrame.setResizable(false);//用户是否可以调整大小
+        jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         jButton1.addActionListener(this);//监听点击图标动作
         jButton2.addActionListener(this);//监听点击图标动作
         jTextArea1.setLineWrap(true);//自动换行
@@ -87,20 +88,27 @@ public class ClientUi extends JFrame implements ActionListener {
         jScrollPane2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jFrame.pack();//自动适应窗口大小
         jFrame.setVisible(true);//是否可见
+        jFrame.pack();//自动适应窗口大小
+
 
     }
 
     public void socket(){
         try{
-            String user=name; //讲用户信息以字符串的形式保存
-            client=new Client(user);//创建一个客户端对象
-            printWriter=new PrintWriter(Client.socket.getOutputStream());//创建输出流
-            printWriter.println("100");//发送创建好友列表标识
-            printWriter.println(name);//发送用户信息
+            //将用户信息以字符串的形式保存
+            String user=name;
+            //创建一个客户端对象
+            client=new Client(user);
+            //创建输出流
+            printWriter=new PrintWriter(Client.socket.getOutputStream());
+            //发送创建好友列表标识
+            printWriter.println("100");
+            //发送用户信息
+            printWriter.println(name);
             printWriter.flush();
-            printWriter.println("400");//发送进入聊天室的标识
+            //发送进入聊天室的标识
+            printWriter.println("400");
             printWriter.println("欢迎【"+user+"】来到聊天室≥Ö‿Ö≤");
             printWriter.flush();
         }catch (Exception e){
@@ -114,15 +122,17 @@ public class ClientUi extends JFrame implements ActionListener {
                 try{
                     printWriter=new PrintWriter(Client.socket.getOutputStream());
                     printWriter.println("500");//发送下线标识
-                    printWriter.println(name+"下线了");
+                    printWriter.println(name+":下线了");
                     printWriter.flush();
                     jFrame.dispose();//软件关闭窗口
                 }catch (Exception e1){
                     e1.printStackTrace();
                 }
             }
-        });
+        }
+        );
     }
+
     @Override
     public void actionPerformed(ActionEvent event){
         jButton1.setText("发送");
@@ -132,17 +142,18 @@ public class ClientUi extends JFrame implements ActionListener {
             if ("发送".equals(event.getActionCommand())){
                 if (!"".equals(jTextField.getText())){
                     if (jCheckBox.isSelected()){
-                        String name1=(String)jComboBox.getSelectedItem();
+                        String name1=(String) jComboBox.getSelectedItem();
                         message="【私聊消息】 "+name+"对"+name1+"说："+jTextField.getText();
                         printWriter.println("300");//发送私聊标识
                         printWriter.println(name+":"+name1+"911"+message);
+                        printWriter.flush();
 
                     }
                     else {
                         printWriter.println("200");//发送群聊标识
-                        printWriter.println(name+"说"+jTextField.getText());
+                        printWriter.println("【群发消息】"+name+"说："+jTextField.getText());
+                        printWriter.flush();
                     }
-                    printWriter.flush();
                 }
             }
             else if ("刷新".equals(event.getActionCommand())){

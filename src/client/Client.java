@@ -87,7 +87,7 @@ class CreatThread extends Thread {
                 else if (msg.equals("400")){
                     msg=bufferedReader2.readLine();
                     clientUi.jTextArea1.append(msg+"\n");
-                    clientUi.jTextArea2.append(msg+"\n");
+                    //clientUi.jTextArea2.append(msg+"\n");
                 }
                 //下线
                 else if (msg.equals("500")){

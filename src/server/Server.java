@@ -1,6 +1,5 @@
 package server;
 
-import client.ClientUi;
 import tools.User;
 
 import java.io.BufferedReader;
@@ -13,50 +12,53 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
+ * 服务端核心功能实现
  * @author lllxh
+ * @author cy
  */
 public class Server {
-    private static final int PORT=15555;
-    ClientUi clientUi = new ClientUi();
-    private ServerSocket server;
-    public ArrayList<PrintWriter> list;
-    public static String user;
     /**
      * 定义一个用户集合
      */
-    public static ArrayList<User> list1=new ArrayList<User>();
+    public static ArrayList<User> list1= new ArrayList<>();
     public User uu;
+    private static final int PORT=15555;
+    private ServerSocket server;
+    public ArrayList<PrintWriter> list;
+    public static String user;
+
 
     public Server(String user) {
-        this.user=user;
+        Server.user =user;
     }
 
-    public void getServer() {
-        list =new ArrayList<PrintWriter>();
-        try{
+    public void getServer() throws Exception{
+        list = new ArrayList<>();
+
             server=new ServerSocket(PORT);
             System.out.println("服务器启动，正在监听... (ง •̀_•́)ง ");
             while(true) {
-                //开始监听客户端线程
-                Socket client=server.accept();
-                PrintWriter writer = new PrintWriter(client.getOutputStream());
-                list.add(writer);
-                Thread t = new ServerThread(client);
-                t.start();
+                try {
+                    //开始监听客户端线程
+                    Socket client = server.accept();
+                    PrintWriter writer = new PrintWriter(client.getOutputStream());
+                    list.add(writer);
+                    Thread t = new ServerThread(client);
+                    t.start();
+                } catch (Exception e){
+                    e.printStackTrace();
             }
-        }catch(Exception e){
-            e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         new Server(user).getServer();
     }
     class ServerThread extends Thread {
         Socket socket;
         private BufferedReader bufferedReader;
         private String msg;
-        private String mssg="";
+        private String msgStr ="";
 
         public ServerThread(Socket socket) {
             try{
@@ -70,15 +72,14 @@ public class Server {
         public void run() {
             try{
                 bufferedReader =new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                while((msg= bufferedReader.readLine())!=null)
-                {
+                while((msg= bufferedReader.readLine())!=null) {
                     //显示好友列表
                     if(msg.equals("100")) {
                         msg= bufferedReader.readLine();
                         //将用户信息跟信息分隔开
-                        String[] st=msg.split(":");
+                        //String[] st=msg.split(":");
                         //将用户信息添加到User对象中
-                        uu=new User(st[0],socket);
+                        uu=new User(msg,socket);
                         //将对象添加到用户集合
                         list1.add(uu);
                         //遍历用户集合
@@ -87,12 +88,12 @@ public class Server {
                             User use=it.next();
                             msg=use.getName()+":";
                             //将所有的用户信息连接成一个字符串
-                            mssg+=msg;
+                            msgStr +=msg;
                         }
                         //显示好友列表匹配标识
                         sendMessage("100");
                         //群发消息
-                        sendMessage(mssg);
+                        sendMessage(msgStr);
                     }
                     //匹配群聊信息
                     else if(msg.equals("200")) {
@@ -114,8 +115,6 @@ public class Server {
                         msg= bufferedReader.readLine();
                         //把传进来的用户信息与说话内容分开
                         String[] rt=msg.split("911");
-                        //在服务端显示说话内容
-                        System.out.println(rt[1]);
                         //把源目用户信息分隔开
                         String[] tg=rt[0].split(":");
                         //遍历用户集合

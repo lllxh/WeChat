@@ -49,6 +49,8 @@ public class LoginUi extends Frame implements ActionListener {
         jFrame.add(jPanel4);
         jTextField2.setText("localhost");
         jTextField3.setText("15555");
+        jTextField2.setEditable(false);
+        jTextField3.setEditable(false);
         jFrame.setLocation(200, 200);
         jFrame.setSize(350, 200);
         jFrame.setResizable(false);
