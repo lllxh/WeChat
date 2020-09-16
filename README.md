@@ -1,4 +1,8 @@
 # WeChat
+
 ### Java网络编程实现
+
 **@author lllxh、cy**
-Java实现TCP聊天室
+
+Java网络编程
+使用TCP Socket实现
